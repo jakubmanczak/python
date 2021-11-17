@@ -7,6 +7,7 @@ nodes = [
 # ...code that extracts them from the edges
 startnode = "S" # the node from which we start
 dist = {} # object holding distances to nodes
+previous = {} # object holding previous nodes
 edges = [ # list of edges of the graph
   ["S","A",7],["S","C",6],["S","F",5],["S","E",6],
   ["A","B",4],["A","C",-2],
@@ -19,14 +20,18 @@ edges = [ # list of edges of the graph
   ["I","H",1]
 ]
 
+finalnode = input("")
+
 for i in nodes: # we set all distances to infinity to start
   dist[i] = float("inf") 
+  previous[i] = None
 dist[startnode] = 0 # distance of starting node is always 0
 
 for i in range(len(nodes) - 1): # we iterate V (amount of vertices) minus 1 times
   for start, destination, weight in edges: 
     if dist[start] != float("inf") and dist[start] + weight < dist[destination]: 
       dist[destination] = dist[start] + weight # we "perform the relaxation" if conditions met
+      previous[destination] = start
 
 for start, destination, weight in edges: # detect if there are negative cycles
   if dist[start] != float("inf") and dist[start] + weight < dist[destination]:
@@ -34,3 +39,10 @@ for start, destination, weight in edges: # detect if there are negative cycles
     print("results ahead are misleading and false :(")
 
 print(dist)
+print(previous)
+
+print(finalnode)
+while 1:
+  finalnode = previous[finalnode]
+  if finalnode == None: break
+  print(finalnode)
